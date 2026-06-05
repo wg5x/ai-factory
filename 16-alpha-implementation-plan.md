@@ -43,14 +43,14 @@ Alpha 的目标是跑通报告类数字商品主闭环：
 
 | 任务 | 内容 | 依赖 | 验收 |
 | --- | --- | --- | --- |
-| A0 样例校验器 | 解析 `15-alpha-v0-fixtures.md` 中所有 JSON 样例，校验关键 ID 闭合 | 无 | 17 个 JSON 样例可解析；`product_id`、`package_id`、`production_task_id` 闭合 |
+| A0 样例校验器 | 解析 `15-alpha-v0-fixtures.md` 中所有 JSON 样例，校验关键 ID 闭合 | 无 | 全部 JSON 样例可解析；`product_id`、`package_id`、`production_task_id` 闭合 |
 | A1 供端能力目录 | 返回 `search.web`、`text.generate`、`report.export`、`content.moderate` 能力和策略 | A0 | 能按 `research_report` 查询能力、额度和策略 |
 | A2 供端工具调用 | 支持工具调用记录、成本估算、失败重试和 fallback | A1 | 默认 provider 超时后能走 fallback，产端只拿最终 `output_ref` |
 | A3 资产引用服务 | 支持 `artifact://` 中间产物和 `asset://` 商品资产的受控解析 | A0 | 销端只能读取正式 `ProductPackage` 中的 `asset://` |
 | A4 生产任务骨架 | 支持 `ProductionTask` 创建、状态流转和 `NodeExecution` 记录 | A0 | 任务能进入 `running`、`waiting_for_human`、`completed`、`failed` |
 | A5 Workflow Runner | 加载 `workflow_research_report_v0` 并按节点顺序执行 | A1、A4 | 能执行到 `outline_review` 并暂停 |
 | A6 质量门禁 | 支持 `pass`、`manual_review`、`rerun`、`fail` 和重跑目标 | A5 | `fact_check` 可输出 `rerun` 并生成新 `NodeExecution` |
-| A7 人工干预 | 支持 `approve`、`edit`、`rerun`、`reject`、运营 `override` | A5、A6 | `edit` 生成新 `output_ref`；`override` 记录 `risk_note` 且不绕过最终质检 |
+| A7 人工干预 | 支持 `approve`、`edit`、`choose`、`rerun`、`reject`、运营 `override` | A5、A6 | `edit` 生成新 `output_ref`；`override` 记录 `risk_note` 且不绕过最终质检 |
 | A8 商品包生成 | 支持候选包、最终质量门禁、正式 `ProductPackage` 固化 | A3、A6、A7 | 生成 `ready_for_listing` 的 `package_research_ai_km_001_v1` |
 | A9 销端接入 | 接收正式 `ProductPackage` 并创建 `Listing` | A8 | listing 状态为 `listed`，不读取产端任务状态 |
 | A10 购买下载 | 支持模拟订单、权益和下载记录 | A9 | `OrderRecord`、`Entitlement`、`DownloadRecord` 绑定同一 `package_id` 和 `version` |
@@ -146,7 +146,7 @@ Alpha 视为完成，需要同时满足：
 
 进入 Beta 前，Alpha 至少需要：
 
-- 报告主闭环连续跑通 3 次。
+- 报告主闭环连续跑通 3 次，每次使用独立 `run_id` 或重置验收数据。
 - T2、T3、T4 三个异常场景至少各通过 1 次。
 - `MarketFeedback` 能稳定归因到商品版本。
 - 运营确认优化任务的入口和字段已准备好。

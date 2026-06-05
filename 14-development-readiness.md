@@ -110,9 +110,9 @@ Alpha 开工前最后确认见 [19-alpha-kickoff-checklist.md](19-alpha-kickoff-
 | 支付范围膨胀 | 拖慢 Alpha | 只做模拟订单和权益记录 |
 | 视频成本过高 | 阻塞主闭环 | 视频线不阻塞报告线，允许占位资产 |
 
-## 7. 进入开发检查
+## 7. 文档就绪检查
 
-Alpha 开发前检查：
+以下检查表示 Alpha 文档口径已经冻结，不代表工程 owner 已完成代码开工 gate。代码开工仍以 [19-alpha-kickoff-checklist.md](19-alpha-kickoff-checklist.md) 的 Code-start Gate 为准。
 
 - [x] v0 契约样例已冻结。
 - [x] 报告线 Workflow Template v0 已冻结。

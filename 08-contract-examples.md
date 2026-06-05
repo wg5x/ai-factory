@@ -212,7 +212,7 @@ feedback_：MarketFeedback
     {
       "asset_id": "asset_report_pdf_001",
       "asset_type": "final_report",
-      "uri": "asset://reports/ai-agent-industry/v1/report.pdf",
+      "uri": "asset://research_report/product_research_ai_industry_001/v1/report.pdf",
       "checksum": "sha256:example",
       "format": "pdf",
       "size": 5242880,
@@ -223,7 +223,7 @@ feedback_：MarketFeedback
     {
       "asset_id": "asset_report_preview_001",
       "asset_type": "preview_pages",
-      "uri": "asset://reports/ai-agent-industry/v1/preview.pdf",
+      "uri": "asset://research_report/product_research_ai_industry_001/v1/preview.pdf",
       "checksum": "sha256:example-preview",
       "format": "pdf",
       "size": 1048576,
@@ -252,7 +252,7 @@ feedback_：MarketFeedback
   "production_task_id": "task_research_ai_industry_001",
   "created_at": "2026-06-05T07:30:00Z",
   "updated_at": "2026-06-05T08:00:00Z",
-  "cover": "asset://reports/ai-agent-industry/v1/cover.png",
+  "cover": "asset://research_report/product_research_ai_industry_001/v1/cover.png",
   "tags": ["AI Agent", "行业研究", "企业应用"],
   "category": "research",
   "suggested_price": 199,
@@ -284,7 +284,7 @@ feedback_：MarketFeedback
     {
       "asset_id": "asset_video_final_001",
       "asset_type": "final_video",
-      "uri": "asset://videos/ai-agent-intro/v1/final.mp4",
+      "uri": "asset://video_generation/product_video_ai_intro_001/v1/final.mp4",
       "checksum": "sha256:example-video",
       "format": "mp4",
       "size": 104857600,
@@ -295,7 +295,7 @@ feedback_：MarketFeedback
     {
       "asset_id": "asset_video_preview_001",
       "asset_type": "preview_clip",
-      "uri": "asset://videos/ai-agent-intro/v1/preview.mp4",
+      "uri": "asset://video_generation/product_video_ai_intro_001/v1/preview.mp4",
       "checksum": "sha256:example-video-preview",
       "format": "mp4",
       "size": 10485760,

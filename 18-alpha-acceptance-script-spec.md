@@ -27,6 +27,8 @@ listing_id：listing_research_ai_km_001_v1
 feedback_id：feedback_research_ai_km_001_2026_06_05
 ```
 
+固定验收 ID 用于单次基准验收。重复运行验收脚本时，必须重置验收数据，或为运行实例追加 `run_id`，避免订单、下载、任务和反馈记录相互覆盖。
+
 ## 2. 脚本清单
 
 | 脚本 | 覆盖任务 | 目的 |

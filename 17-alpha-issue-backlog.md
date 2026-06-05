@@ -137,8 +137,8 @@ What to build：
 
 Acceptance criteria：
 
-- [ ] creator 可执行 `approve`、`edit`、`rerun`。
-- [ ] operator 可执行 `reject`、`override`。
+- [ ] creator 可执行 `approve`、`edit`、`choose`、`rerun`。
+- [ ] operator 可执行 `approve`、`edit`、`choose`、`rerun`、`reject`、`override`。
 - [ ] `edit` 生成新的 `output_ref`。
 - [ ] `override` 必须记录 `risk_note`，且仍进入最终质量门禁。
 
@@ -229,6 +229,7 @@ Acceptance criteria：
 - [ ] 覆盖 T5 工具 fallback。
 - [ ] 覆盖 T6 模拟购买下载。
 - [ ] 覆盖 T7 反馈回流。
+- [ ] 覆盖 S8 边界守卫。
 - [ ] S0-S8 均输出可追踪证据。
 
 ## 3. 发布顺序
