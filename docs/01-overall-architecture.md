@@ -1,6 +1,6 @@
 # 灵枢平台总体架构讨论稿
 
-> 阅读入口见 [00-index.md](00-index.md)。领域词汇以 [CONTEXT.md](CONTEXT.md) 为准，跨端对象契约以 [05-contracts.md](05-contracts.md) 为准。
+> 阅读入口见 [README.md](README.md)。领域词汇以 [CONTEXT.md](CONTEXT.md) 为准，跨端对象契约以 [05-contracts.md](05-contracts.md) 为准。
 
 ## 1. 平台定位
 

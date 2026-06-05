@@ -26,6 +26,8 @@
 18. [17-alpha-issue-backlog.md](17-alpha-issue-backlog.md)：查看 Alpha 可发布为 issue 或 sprint item 的本地任务清单。
 19. [18-alpha-acceptance-script-spec.md](18-alpha-acceptance-script-spec.md)：查看 Alpha 验收脚本入口、步骤、断言和证据输出。
 20. [19-alpha-kickoff-checklist.md](19-alpha-kickoff-checklist.md)：查看 Alpha 开工前最后一次确认清单。
+21. [PRD.md](PRD.md)：查看 Alpha 报告类数字商品主闭环的收束版 PRD。
+22. [TODO.md](TODO.md)：查看 Alpha 开工、排期和验收用 TODO 清单。
 
 ## 2. 文档分工
 
@@ -183,6 +185,28 @@ Alpha 开工清单文档用于开始写代码前的最终确认。
 - 哪些口径已经冻结，不能在开发中反复漂移。
 - 哪些内容明确不进入 Alpha 开发。
 
+### Alpha PRD 文档
+
+Alpha PRD 文档把已有架构、契约、验收和开工口径收束为产品需求。
+
+它重点回答：
+
+- Alpha 为什么做。
+- Alpha 具体做什么、不做什么。
+- 谁使用这条主闭环。
+- 完成后如何判定成功。
+
+### Alpha TODO List 文档
+
+Alpha TODO List 文档把 PRD 和实施计划转成开工、排期和验收用待办清单。
+
+它重点回答：
+
+- 开工前有哪些 gate。
+- A0-A12 每个任务要完成哪些事项。
+- 每个任务对应哪些验收脚本。
+- Alpha 最终 done definition 是什么。
+
 ## 3. 第一阶段原则
 
 第一阶段的目标不是一次性做完整交易市场，而是先验证数字商品生产闭环。
@@ -223,4 +247,6 @@ Alpha 开工清单文档用于开始写代码前的最终确认。
 14. 是 Alpha 本地 issue、任务发布顺序或任务验收口径变化，改 `17-alpha-issue-backlog.md`。
 15. 是 Alpha 验收脚本入口、步骤、断言或证据输出变化，改 `18-alpha-acceptance-script-spec.md`。
 16. 是 Alpha 开工 owner、环境、任务发布或 code-start gate 变化，改 `19-alpha-kickoff-checklist.md`。
-17. 是重大架构取舍，后续应新增 ADR 记录。
+17. 是 Alpha 产品目标、用户故事、范围或成功标准变化，改 `PRD.md`。
+18. 是 Alpha 待办事项、执行顺序或完成定义变化，改 `TODO.md`。
+19. 是重大架构取舍，后续应新增 ADR 记录。
