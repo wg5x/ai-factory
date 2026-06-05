@@ -119,6 +119,16 @@ Adapter 是供端内部实现细节；产端只依赖 `ToolCapability` 和 `Tool
 默认工具 → 失败重试 → 备用工具
 ```
 
+第一阶段 provider 口径：
+
+```text
+search.web：受控搜索 provider + fallback 或 mock fallback
+text.generate：受控文本生成 provider + fallback 或 mock fallback
+report.export：平台导出 Adapter
+content.moderate：规则/人工混合 Adapter
+video.generate：短片段 provider、占位资产 Adapter 或 mock Adapter
+```
+
 后续再扩展为智能路由。
 
 ## 7. 权限与额度

@@ -64,26 +64,32 @@ mode_c：只跑通视频商品包闭环，不调用高成本视频生成。
 
 ### 2.3 第一阶段供端 provider 范围
 
-状态：open
+状态：decided
 
-需要确认：
+决策：
 
-- `search.web` 使用哪些 provider。
-- `text.generate` 使用哪些 provider。
-- `report.export` 是否自研，还是复用第三方导出服务。
-- 视频相关能力是否接入真实 provider。
+- 报告线第一阶段只要求 `search.web`、`text.generate`、`report.export`、`content.moderate` 四类能力可用。
+- 每类能力至少配置一个主 provider；`search.web` 和 `text.generate` 至少配置一个 fallback provider 或 mock fallback。
+- `report.export` 第一阶段优先使用平台自研或受控导出 Adapter，不依赖外部商业导出服务作为阻塞项。
+- `content.moderate` 第一阶段允许使用规则审核和人工审核混合实现，但必须通过供端能力目录暴露。
+- 视频相关能力按 `mode_b` 验证；如无法稳定接入真实 provider，可降级到受控占位资产或 mock Adapter，并在验收记录中标明。
 
-建议：
+第一阶段 provider 口径：
 
-- 报告线先只接入 `search.web`、`text.generate`、`report.export`、`content.moderate` 的最小 provider。
-- 视频线 provider 视 `mode_b` 或 `mode_c` 决定。
+```text
+search.web：受控搜索 provider + fallback 或 mock fallback
+text.generate：受控文本生成 provider + fallback 或 mock fallback
+report.export：平台导出 Adapter
+content.moderate：规则/人工混合 Adapter
+video.generate：短片段 provider、占位资产 Adapter 或 mock Adapter
+```
 
 影响：
 
 - 影响 `ToolInvocationPolicy` 样例和 fallback 策略。
 - 影响工具调用成本追踪。
 
-需要更新：
+已同步：
 
 - [02-supply-platform.md](02-supply-platform.md)
 - [08-contract-examples.md](08-contract-examples.md)
@@ -91,24 +97,28 @@ mode_c：只跑通视频商品包闭环，不调用高成本视频生成。
 
 ### 2.4 资产存储和 URI 规范
 
-状态：proposed
+状态：decided
 
-需要确认：
+决策：
 
-- `asset://` 是否作为内部统一 URI scheme。
-- 资产是否区分中间资产、候选包资产和正式商品资产。
-- 销端读取资产是否需要签名 URL 或临时授权。
+- 第一阶段文档层使用 `asset://` 表示可交付资产的逻辑引用。
+- 产端中间产物使用 `artifact://`，只在产端和运营审核视图中可见。
+- 资产分为 `intermediate`、`candidate_package`、`official_package` 三类。
+- 销端只能读取正式 `ProductPackage.assets` 和 `preview_assets` 中的 `asset://` 引用。
+- 销端下载或预览时由资产服务把 `asset://` 解析为临时访问 URL；临时 URL 不写入跨端契约。
 
-建议：
+第一阶段 URI 口径：
 
-- 第一阶段文档层使用 `asset://` 表示逻辑引用。
-- 实现前再确认实际对象存储和访问授权方案。
+```text
+artifact://task_id/node_id/output_id：产端中间产物
+asset://product_type/product_id/version/file：商品包资产
+```
 
 影响：
 
 - 影响 `ProductPackage.assets`、`preview_assets`、下载记录和权益校验。
 
-需要更新：
+已同步：
 
 - [05-contracts.md](05-contracts.md)
 - [08-contract-examples.md](08-contract-examples.md)
@@ -117,25 +127,28 @@ mode_c：只跑通视频商品包闭环，不调用高成本视频生成。
 
 ### 2.5 人工审核角色和权限
 
-状态：open
+状态：decided
 
-需要确认：
+决策：
 
-- 创作者是否可以执行所有人工干预动作。
-- 运营人员是否可以执行 `override`。
-- 哪些动作需要记录风险说明。
+- 创作者可以执行 `approve`、`edit`、`choose`、`rerun`。
+- 运营人员可以执行 `approve`、`edit`、`choose`、`rerun`、`reject`、`override`。
+- `reject` 必须记录原因。
+- `override` 必须记录操作者、原因、风险说明和恢复节点。
+- 人工干预不能绕过最终商品质检，运营人员的 `override` 也只能让流程继续到后续节点或重新进入质检。
 
-建议：
+第一阶段权限口径：
 
-- 创作者可以 `approve`、`edit`、`choose`、`rerun`。
-- 运营人员可以 `reject`、`override`。
-- `override` 必须记录操作者、原因和风险说明。
+```text
+creator：approve / edit / choose / rerun
+operator：approve / edit / choose / rerun / reject / override
+```
 
 影响：
 
 - 影响 `HumanReviewRecord`、任务恢复逻辑和审计要求。
 
-需要更新：
+已同步：
 
 - [06-pipeline-runtime.md](06-pipeline-runtime.md)
 - [09-logical-data-model.md](09-logical-data-model.md)
@@ -143,19 +156,21 @@ mode_c：只跑通视频商品包闭环，不调用高成本视频生成。
 
 ### 2.6 商品价格和支付验收范围
 
-状态：proposed
+状态：decided
 
-建议：
+决策：
 
 - 第一阶段记录建议价格、模拟订单、基础销售记录和分成比例预留字段。
 - 不接真实支付，不做完整结算。
+- `OrderRecord.payment_status` 第一阶段使用 `simulated_paid` 或 `free_download`，用于区分模拟购买和免费下载。
+- 销端可以通过模拟订单生成 `Entitlement`，但不得把模拟支付视为真实财务结算。
 
 影响：
 
 - 影响销端验收范围。
 - 影响 `OrderRecord` 和 `MarketFeedback.sales_summary` 的数据来源。
 
-需要更新：
+已同步：
 
 - [04-sales-platform.md](04-sales-platform.md)
 - [09-logical-data-model.md](09-logical-data-model.md)
@@ -304,13 +319,13 @@ mode_c：只跑通视频商品包闭环，不调用高成本视频生成。
 
 ### 5.3 第一阶段可落地性
 
-- [ ] 报告线可以作为主验收路径。
-- [ ] 视频线验收模式已确认。
-- [ ] 供端最小 provider 范围已确认。
-- [ ] 资产 URI 和访问授权方向已确认。
-- [ ] 人工审核角色和权限已确认。
-- [ ] 支付和结算简化范围已确认。
-- [ ] 反馈触发优化任务的门槛已确认。
+- [x] 报告线可以作为主验收路径。
+- [x] 视频线验收模式已确认。
+- [x] 供端最小 provider 范围已确认。
+- [x] 资产 URI 和访问授权方向已确认。
+- [x] 人工审核角色和权限已确认。
+- [x] 支付和结算简化范围已确认。
+- [x] 反馈触发优化任务的门槛已确认。
 
 ## 6. 决策记录模板
 

@@ -150,7 +150,9 @@ product_line_id
 creator_id
 input_ref
 workflow_template_id(optional)
+task_kind(optional)
 source_feedback_id(optional)
+parent_production_task_id(optional)
 ```
 
 输出：
@@ -164,6 +166,8 @@ current_node_id
 约束：
 
 - 基于市场反馈创建的优化任务必须记录 `source_feedback_id`。
+- 基于已有商品版本继续优化时，应记录 `parent_production_task_id`。
+- 未指定 `task_kind` 时默认为 `new_product`；基于反馈创建时为 `optimization`。
 - 如果没有指定 `workflow_template_id`，产端使用产品线默认模板。
 
 ### 3.2 查询生产任务
@@ -186,6 +190,9 @@ production_task_id
 production_task_id
 status
 current_node_id
+task_kind
+source_feedback_id
+parent_production_task_id
 waiting_reason
 failed_reason
 latest_package_id
@@ -212,7 +219,9 @@ production_task_id
 node_execution_id
 action
 operator_id
+operator_role
 reason
+risk_note(optional)
 output_ref(optional)
 target_node_for_rerun(optional)
 ```
@@ -228,7 +237,9 @@ resume_node_id
 
 约束：
 
-- `override` 必须记录原因和风险说明。
+- `creator` 角色可以执行 `approve`、`edit`、`choose`、`rerun`。
+- `operator` 角色可以执行 `approve`、`edit`、`choose`、`rerun`、`reject`、`override`。
+- `override` 必须记录 `reason` 和 `risk_note`。
 - `edit` 必须生成新的 `output_ref`。
 - 人工干预不能绕过最终商品质检。
 
@@ -396,6 +407,7 @@ product_id
 package_id
 version
 asset_id
+payment_status(optional)
 ```
 
 输出：
@@ -410,6 +422,7 @@ entitlement_id
 
 - 用户权益必须绑定购买时的 `package_id` 和 `version`。
 - 第一阶段只记录基础销售数据，不做完整结算。
+- 第一阶段 `payment_status` 只允许 `simulated_paid` 或 `free_download`。
 
 ### 4.5 回传市场反馈
 

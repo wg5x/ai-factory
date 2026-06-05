@@ -268,12 +268,28 @@ workflow_template_id
 creator_id
 status
 input_ref
+task_kind
+source_feedback_id
+parent_production_task_id
 current_node_id
 created_at
 updated_at
 completed_at
 failed_reason
 ```
+
+`task_kind` 第一阶段可取值：
+
+```text
+new_product
+optimization
+```
+
+设计约束：
+
+- 基于市场反馈创建的优化任务必须记录 `source_feedback_id`。
+- 优化任务应记录 `parent_production_task_id`，用于追踪它基于哪一次生产任务继续优化。
+- 普通新商品生产任务的 `source_feedback_id` 和 `parent_production_task_id` 可以为空。
 
 ### 3.5 NodeExecution
 
@@ -305,6 +321,7 @@ failed_reason
 ```text
 artifact_ref
 artifact_type
+asset_scope
 uri
 checksum
 created_by_node_execution_id
@@ -312,10 +329,20 @@ created_at
 metadata
 ```
 
+`asset_scope` 第一阶段可取值：
+
+```text
+intermediate
+candidate_package
+official_package
+```
+
 设计约束：
 
-- `uri` 可以指向对象存储、内部文档、导出文件或生成资产。
-- 销端只能读取进入 `ProductPackage` 的资产引用。
+- `intermediate` 资产使用 `artifact://`，只供产端和运营审核视图使用。
+- `candidate_package` 资产可以进入候选商品包，但不能交付销端。
+- `official_package` 资产使用 `asset://`，可以进入正式 `ProductPackage`。
+- 销端只能读取进入正式 `ProductPackage` 的 `asset://` 资产引用。
 
 ### 3.7 QualityGateResult
 
@@ -356,12 +383,20 @@ production_task_id
 node_execution_id
 action
 operator_id
+operator_role
 reason
+risk_note
 input_ref
 output_ref
 resume_node_id
 created_at
 ```
+
+设计约束：
+
+- `creator` 角色可以执行 `approve`、`edit`、`choose`、`rerun`。
+- `operator` 角色可以执行 `approve`、`edit`、`choose`、`rerun`、`reject`、`override`。
+- `override` 必须记录 `risk_note`，并且不能绕过最终商品质检。
 
 ### 3.9 ProductPackageCandidate
 
@@ -465,11 +500,24 @@ package_id
 version
 amount
 currency
+payment_status
 author_id
 platform_share_ratio
 creator_share_ratio
 created_at
 ```
+
+`payment_status` 第一阶段可取值：
+
+```text
+simulated_paid
+free_download
+```
+
+设计约束：
+
+- 第一阶段不接真实支付网关，`simulated_paid` 只用于验收购买记录和权益生成。
+- `free_download` 用于免费样品或运营放行下载。
 
 ### 4.4 DownloadRecord
 

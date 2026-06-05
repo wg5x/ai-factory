@@ -20,6 +20,12 @@
 12. [07-first-phase-slices.md](07-first-phase-slices.md)：理解第一阶段如何拆成可排期、可验收的工作切片。
 13. [12-first-phase-acceptance-plan.md](12-first-phase-acceptance-plan.md)：理解第一阶段如何最终验收。
 14. [13-open-decisions.md](13-open-decisions.md)：查看进入开发前仍需确认的决策、风险和评审清单。
+15. [14-development-readiness.md](14-development-readiness.md)：查看进入开发前的 Alpha / Beta 范围、mock 口径和开发就绪检查项。
+16. [15-alpha-v0-fixtures.md](15-alpha-v0-fixtures.md)：查看 Alpha 开发冻结的 v0 样例、报告线 Workflow Template 和验收数据。
+17. [16-alpha-implementation-plan.md](16-alpha-implementation-plan.md)：查看 Alpha 研发任务、依赖、并行建议和测试矩阵。
+18. [17-alpha-issue-backlog.md](17-alpha-issue-backlog.md)：查看 Alpha 可发布为 issue 或 sprint item 的本地任务清单。
+19. [18-alpha-acceptance-script-spec.md](18-alpha-acceptance-script-spec.md)：查看 Alpha 验收脚本入口、步骤、断言和证据输出。
+20. [19-alpha-kickoff-checklist.md](19-alpha-kickoff-checklist.md)：查看 Alpha 开工前最后一次确认清单。
 
 ## 2. 文档分工
 
@@ -114,6 +120,69 @@
 
 待决事项文档集中记录进入开发前需要人工确认的问题、建议方案、风险和评审清单。
 
+### 开发就绪文档
+
+开发就绪文档汇总第一阶段进入开发前的最终口径。
+
+它重点回答：
+
+- Alpha 和 Beta 分别做什么。
+- 哪些能力必须真实实现，哪些能力可以 mock 或简化。
+- 进入开发前必须产出哪些样例和验收数据。
+- 哪些检查项通过后可以开始开发。
+
+### Alpha v0 冻结样例文档
+
+Alpha v0 冻结样例文档提供 Alpha 开发和联调可直接使用的最小样例。
+
+它重点回答：
+
+- Alpha 使用哪组验收数据。
+- 报告线 `WorkflowTemplate v0` 的节点、边、人工点和质量门禁是什么。
+- Alpha 需要哪些产端运行对象和销端对象样例。
+- Alpha 联调时一条商品链路的 ID 如何闭合。
+
+### Alpha 实施计划文档
+
+Alpha 实施计划文档把冻结样例转成可排期的研发任务。
+
+它重点回答：
+
+- Alpha 按什么顺序开发。
+- 哪些任务可以并行，哪些任务必须串行。
+- 每个任务的依赖和验收是什么。
+- Alpha 需要覆盖哪些最小测试场景。
+
+### Alpha 本地 Issue Backlog 文档
+
+Alpha 本地 Issue Backlog 文档把实施计划转成可领取、可发布的任务项。
+
+它重点回答：
+
+- 哪些任务可以作为独立 issue 或 sprint item。
+- 每个任务的依赖、建设内容和验收标准是什么。
+- 发布正式 issue 时建议按什么顺序排。
+
+### Alpha 验收脚本规格文档
+
+Alpha 验收脚本规格文档定义进入开发后需要实现的验收入口。
+
+它重点回答：
+
+- 每个验收脚本覆盖哪些研发任务。
+- 脚本应执行哪些步骤和断言。
+- 验收失败时需要输出哪些定位证据。
+
+### Alpha 开工清单文档
+
+Alpha 开工清单文档用于开始写代码前的最终确认。
+
+它重点回答：
+
+- 开工前哪些 owner、样例、环境和任务必须就绪。
+- 哪些口径已经冻结，不能在开发中反复漂移。
+- 哪些内容明确不进入 Alpha 开发。
+
 ## 3. 第一阶段原则
 
 第一阶段的目标不是一次性做完整交易市场，而是先验证数字商品生产闭环。
@@ -148,4 +217,10 @@
 8. 是产品线 MVP 规格变化，改 `11-product-line-mvp-specs.md`。
 9. 是第一阶段排期、依赖或验收边界变化，改 `07-first-phase-slices.md` 或 `12-first-phase-acceptance-plan.md`。
 10. 是进入开发前的待决事项、风险或评审清单变化，改 `13-open-decisions.md`。
-11. 是重大架构取舍，后续应新增 ADR 记录。
+11. 是开发前范围、mock 口径或就绪检查变化，改 `14-development-readiness.md`。
+12. 是 Alpha v0 样例、报告线模板或验收数据变化，改 `15-alpha-v0-fixtures.md`。
+13. 是 Alpha 任务拆解、依赖、测试矩阵或实施顺序变化，改 `16-alpha-implementation-plan.md`。
+14. 是 Alpha 本地 issue、任务发布顺序或任务验收口径变化，改 `17-alpha-issue-backlog.md`。
+15. 是 Alpha 验收脚本入口、步骤、断言或证据输出变化，改 `18-alpha-acceptance-script-spec.md`。
+16. 是 Alpha 开工 owner、环境、任务发布或 code-start gate 变化，改 `19-alpha-kickoff-checklist.md`。
+17. 是重大架构取舍，后续应新增 ADR 记录。

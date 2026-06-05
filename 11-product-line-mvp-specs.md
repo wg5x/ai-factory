@@ -66,9 +66,13 @@ report_writing
   ↓
 fact_check
   ↓
+final_review
+  ↓
+package_report_candidate
+  ↓
 final_quality_gate
   ↓
-package_report
+publish_report_package
 ```
 
 ### 2.4 节点规格
@@ -84,8 +88,10 @@ package_report
 | `outline_review` | `human_review` | 人工确认报告大纲。 |
 | `report_writing` | `agent_node` | 生成报告正文。 |
 | `fact_check` | `quality_gate` | 检查事实、引用、时间敏感信息和来源质量。 |
-| `final_quality_gate` | `quality_gate` | 检查完整性、格式、版权风险和商品信息。 |
-| `package_report` | `package_node` | 生成报告类 `ProductPackage`。 |
+| `final_review` | `human_review` | 人工确认是否进入候选包打包。 |
+| `package_report_candidate` | `package_node` | 生成报告类候选商品包和候选资产。 |
+| `final_quality_gate` | `quality_gate` | 检查候选商品包的完整性、格式、版权风险、授权和商品信息。 |
+| `publish_report_package` | `package_node` | 固化正式报告类 `ProductPackage`。 |
 
 ### 2.5 工具能力
 
@@ -249,9 +255,11 @@ voice_and_subtitle
   ↓
 edit_assembly
   ↓
+package_video_candidate
+  ↓
 video_quality_gate
   ↓
-package_video
+publish_video_package
 ```
 
 ### 3.4 节点规格
@@ -267,8 +275,9 @@ package_video
 | `clip_generation_or_selection` | `tool_node` | 调用视频、图片或素材选择能力。 |
 | `voice_and_subtitle` | `tool_node` | 生成配音和字幕。 |
 | `edit_assembly` | `tool_node` | 合成预览视频或最终视频。 |
-| `video_quality_gate` | `quality_gate` | 检查音画同步、字幕、时长、版权和风险。 |
-| `package_video` | `package_node` | 生成视频类 `ProductPackage`。 |
+| `package_video_candidate` | `package_node` | 生成视频类候选商品包和候选资产。 |
+| `video_quality_gate` | `quality_gate` | 检查候选商品包的音画同步、字幕、时长、版权、授权和商品信息。 |
+| `publish_video_package` | `package_node` | 固化正式视频类 `ProductPackage`。 |
 
 ### 3.5 工具能力
 

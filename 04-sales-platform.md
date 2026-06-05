@@ -130,6 +130,15 @@ MarketFeedback
 - 是否使用平台补贴资源
 - 是否使用第三方授权资产
 
+第一阶段不接真实支付网关。购买验收使用模拟订单，`payment_status` 只记录：
+
+```text
+simulated_paid
+free_download
+```
+
+模拟订单只用于验证权益、下载和反馈归因，不作为真实财务结算依据。
+
 后续再扩展为完整 Revenue Split Engine。
 
 ## 7. 系统边界

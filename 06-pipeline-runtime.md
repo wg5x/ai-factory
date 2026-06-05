@@ -182,13 +182,14 @@ override
 - `edit`：保存人工修改后的产物，再继续执行。
 - `choose`：在多个候选产物中选择一个作为后续输入。
 - `rerun`：退回指定节点。
-- `override`：记录人工覆盖原因后继续。
+- `override`：记录人工覆盖原因和风险说明后继续。
 
 设计约束：
 
 - `override` 必须记录操作者、原因和风险说明。
 - 人工修改后的产物必须产生新的 `output_ref`。
 - 人工节点不能直接绕过最终商品质检。
+- 第一阶段只有 `operator` 角色可以执行 `override`。
 
 ## 7. 回退与重跑
 
@@ -206,7 +207,18 @@ override
 
 ## 8. 商品版本生成
 
-当生产任务通过最终质量门禁后，产端进入 `packaging`，生成并校验 `ProductPackage`；成功后任务进入 `completed`。
+商品包生成分两步：
+
+1. `package_node` 生成候选商品包和候选资产。
+2. 最终质量门禁校验候选商品包的内容、资产、授权和商品信息；通过后固化为正式 `ProductPackage`。
+
+当正式 `ProductPackage` 生成成功后，任务进入 `completed`。
+
+设计约束：
+
+- 候选商品包不能交付销端上架。
+- 最终质量门禁必须发生在正式 `ProductPackage` 生成前。
+- 正式 `ProductPackage` 的资产必须使用 `asset://` 逻辑引用。
 
 版本规则：
 
