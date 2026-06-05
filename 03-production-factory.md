@@ -8,12 +8,12 @@
 
 它负责把供端提供的 Token、模型和工具，组织成可执行、可干预、可质检、可复用的数字商品生产流水线。
 
-第一阶段落地两条产品线：
+第一阶段以深度调研报告生产线作为主落地产品线，并把视频生成生产线作为第二验证路径：
 
-- 深度调研报告
-- 视频生成
+- 深度调研报告：必须跑通完整生产、打包、上架、反馈和优化闭环。
+- 视频生成：先用受控占位资产或短片段验证视频类商品包闭环。
 
-两条产品线共用同一套流水线框架，但使用不同的智能体、工具、质检规则和产出格式。
+两条路径共用同一套流水线框架，但使用不同的智能体、工具、质检规则和产出格式。
 
 ## 2. 核心原则
 
@@ -276,18 +276,18 @@ fail：终止生产
 ```text
 ProductPackage
 - product_id
+- package_id
 - product_type
 - title
 - description
-- cover
-- preview_assets
-- final_assets
 - author_id
-- tags
-- category
 - version
-- quality_score
-- license_type
+- status
+- assets
+- preview_assets
+- type_metadata
+- quality_result
+- license
 - suggested_price
 - production_metadata
 ```
@@ -307,7 +307,7 @@ ProductPackage
 - 人工干预节点
 - 质量门禁
 - 深度调研报告生产线
-- 视频生成生产线
+- 视频生成生产线的简化验证路径
 - ProductPackage 输出
 
 暂不优先做复杂协作、多产品线插件市场和高级自动路由。

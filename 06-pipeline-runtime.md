@@ -41,14 +41,16 @@ cancelled
 - `running`：节点正在自动执行。
 - `waiting_for_human`：任务等待人工处理。
 - `quality_checking`：正在执行质量门禁。
-- `packaging`：正在生成 `ProductPackage`。
-- `completed`：已生成可交付商品包。
+- `packaging`：正在把候选包校验并固化为正式 `ProductPackage`。
+- `completed`：已生成可交付的正式商品包。
 - `failed`：任务无法继续执行。
 - `cancelled`：任务被人工取消。
 
 设计约束：
 
-- 只有 `completed` 状态可以生成正式 `ProductPackage`。
+- 只有最终质检通过并完成 `packaging` 后，任务才能进入 `completed`。
+- `completed` 任务关联的正式 `ProductPackage` 才能交付销端上架。
+- `completed` 前的打包产物只能作为候选包。
 - `waiting_for_human` 必须记录等待原因和恢复入口。
 - `failed` 必须记录失败节点、失败原因和可否重跑。
 
@@ -204,7 +206,7 @@ override
 
 ## 8. 商品版本生成
 
-当生产任务完成并通过最终质量门禁后，产端生成 `ProductPackage`。
+当生产任务通过最终质量门禁后，产端进入 `packaging`，生成并校验 `ProductPackage`；成功后任务进入 `completed`。
 
 版本规则：
 
@@ -215,7 +217,7 @@ override
 
 销端展示规则：
 
-- 默认展示最新 `listed` 版本。
+- 默认展示销端上架状态为 `listed` 的最新版本。
 - 老版本可以保留下载或归档。
 - 用户购买记录必须绑定购买时的商品版本。
 
@@ -246,4 +248,3 @@ MarketFeedback 回流
 ```
 
 这个闭环跑通后，再扩展复杂协作、插件市场、智能路由和高级计费。
-

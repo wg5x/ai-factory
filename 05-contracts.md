@@ -11,6 +11,7 @@
 3. 资产字段必须使用可追踪的引用，不直接传递不可管理的本地路径。
 4. 状态字段必须可枚举，避免自由文本驱动流程。
 5. 第一阶段字段可以轻量，但必须区分必填和可选。
+6. 跨端对象建议携带可选 `schema_version`，用于区分契约版本和商品版本。
 
 ## 2. 供端到产端
 
@@ -27,13 +28,13 @@ input_schema
 output_schema
 supported_product_lines
 status
-provider_policy_id
 ```
 
 可选字段：
 
 ```text
 description
+default_policy_id
 quality_level
 latency_level
 cost_level
@@ -54,6 +55,8 @@ experimental
 
 - 产端只能依赖 `capability_id` 和 schema，不能依赖具体供应商。
 - 供应商切换必须由供端完成。
+- 具体 provider、重试、额度和限流策略不属于 `ToolCapability`，由 `ToolInvocationPolicy` 按调用范围解析。
+- 第一阶段如需默认策略，可以使用可选的 `default_policy_id`，但产品线正式调用时仍应解析到明确策略。
 - `experimental` 能力默认不能进入正式商品生产线。
 
 ### 2.2 ResourceQuota
@@ -96,11 +99,21 @@ transcode
 third_party_api
 ```
 
+`status` 可取值：
+
+```text
+active
+exhausted
+suspended
+expired
+```
+
 设计约束：
 
 - 额度检查发生在节点执行前。
 - 额度预留和实际消耗必须分开记录。
 - 节点失败时是否退回额度，由 `ToolInvocationPolicy` 决定。
+- `exhausted` 和 `suspended` 状态不能继续预留新额度。
 
 ### 2.3 ToolInvocationPolicy
 
@@ -111,6 +124,7 @@ third_party_api
 ```text
 policy_id
 capability_id
+scope
 allowed_subjects
 default_provider
 fallback_providers
@@ -126,6 +140,20 @@ rate_limit_policy
 max_attempts
 backoff
 retryable_errors
+```
+
+`scope` 至少包含：
+
+```text
+product_line_id
+```
+
+`scope` 可选包含：
+
+```text
+workflow_id
+subject_type
+subject_id
 ```
 
 设计约束：
@@ -153,6 +181,7 @@ version
 status
 assets
 preview_assets
+type_metadata
 quality_result
 license
 production_task_id
@@ -179,9 +208,27 @@ publish_channels
 draft
 quality_passed
 ready_for_listing
-listed
-delisted
 archived
+```
+
+`type_metadata` 按 `product_type` 承载展示和交付需要的类型扩展信息。
+
+报告类商品第一阶段至少包含：
+
+```text
+page_count
+format
+outline_ref
+citation_summary_ref
+```
+
+视频类商品第一阶段至少包含：
+
+```text
+duration_seconds
+resolution
+subtitle_languages
+preview_clip_ref
 ```
 
 `assets` 至少包含：
@@ -209,10 +256,13 @@ checked_at
 
 设计约束：
 
-- 销端只能上架 `ready_for_listing` 或 `listed` 状态的商品包。
+- `status` 表示商品包交付状态，不表示生产任务状态。
+- `listed`、`delisted` 属于销端上架状态，不属于 `ProductPackage.status`。
+- 销端只能上架 `ready_for_listing` 状态的商品包。
 - 产端可以生成多个版本，但同一时间销端只能把一个版本作为默认展示版本。
 - 资产必须通过 `asset_id` 和 `uri` 引用，避免销端依赖产端内部存储结构。
 - `license_status` 未通过时不能进入正式销售。
+- 生产任务完成前的打包产物只能作为候选包，不能交付销端上架。
 
 ## 4. 销端到产端
 
@@ -265,8 +315,8 @@ complaint_count
 
 第一阶段采用轻量版本策略：
 
+- `schema_version` 表示契约版本，`ProductPackage.version` 表示商品版本，两者不能混用。
 - 契约新增可选字段不破坏兼容。
 - 删除字段、修改字段含义、修改状态枚举必须视为破坏性变更。
 - 破坏性变更需要新增契约版本。
 - 销端和产端之间至少保留一个旧版本读取窗口。
-

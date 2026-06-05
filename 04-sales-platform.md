@@ -43,6 +43,7 @@ ProductPackage
 销端只能依赖 `ProductPackage` 契约，不应读取产端内部任务状态或中间资产。
 
 不同商品类型可以共用商品展示框架，但展示内容略有差异。
+差异化展示信息优先来自 `ProductPackage.type_metadata`、`assets` 和 `preview_assets`。
 
 报告商品可以展示：
 
@@ -66,6 +67,8 @@ ProductPackage
 - 分辨率
 - 字幕信息
 - 下载文件
+
+销端可以维护自己的上架状态，例如 `listed`、`delisted` 和 `archived`，但这些状态不写回 `ProductPackage.status`。
 
 ## 4. 轻智能能力
 
@@ -139,6 +142,7 @@ MarketFeedback
 ```
 
 销端可以发起优化请求，但不直接修改生产流程。
+第一阶段由运营确认后触发优化任务，低样本反馈只记录，不自动触发重做。
 
 典型链路：
 
